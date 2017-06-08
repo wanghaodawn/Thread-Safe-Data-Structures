@@ -43,6 +43,7 @@ public class ThreadSafeLinkedList {
 
     /**
      * Instance Variable, the head of the Linked List.
+     * Use head's lock as global lock
      */
     private Node head;
 
@@ -469,8 +470,10 @@ public class ThreadSafeLinkedList {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String res = "";
+        Node node = head.next;
         try {
-            Node node = head.next;
+            // Global read lock
+            head.locallock.readLock().lock();
             while (node != null) {
                 node.localLock.readLock().lock();
                 sb.append(node.value);
@@ -486,6 +489,11 @@ public class ThreadSafeLinkedList {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (node != null) {
+                node.locallock.readLock().unlock();
+            }
+            // Global read lock
+            head.locallock.readLock().unlock();
         }
         return res;
     }
