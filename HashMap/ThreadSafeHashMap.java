@@ -13,7 +13,7 @@ import java.util.concurrent.locks.*;
 public class ThreadSafeHashMap {
 
     /**
-     * The Entry of the value of HashMap.
+     * The Entry of the value stored in HashMap.
      */
     class Entry {
         public String value;
